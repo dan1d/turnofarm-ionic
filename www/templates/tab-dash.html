@@ -1,0 +1,55 @@
+<ion-view view-title="TurnoFarm" ng-controller="DashCtrl as vm">
+  <ion-nav-buttons side="left">
+      <button class="button button-icon button-clear ion-navicon" ng-click="openMenu()"></button>
+    </ion-nav-buttons>
+  <ion-content>
+    <div class="row">
+      <div class=" col col-50">
+        <button class="button small" ng-click="vm.openDatePicker()">
+          <i class="icon ion-calendar balanced padding"></i>
+          <br/>
+          <small > {{vm.date | date: "mediumDate"}}</small>
+        </button>
+      </div>
+      <div class="col col-50">
+        <button class="button small" ng-click="vm.toggleLeft()">
+          <i class="icon ion-gear-b balanced padding"></i>
+          <br/>
+          <small>Configuracion</small>
+        </button>
+
+      </div>
+    </div>
+    <div class="row">
+    </div>
+    <div class="row">
+      <div class=" col col-100">
+        <h4 class="calm">Lista de farmacias de turno</h4>
+      </div>
+    </div>
+    <br/>
+    <br/>
+    <br/>
+    <ion-list class="dark" id="my-item-list">
+      <ion-item ng-repeat="address in vm.addresses" type="item-text-wrap" class="my-item-content item-icon-right">
+        <div class="dark">
+          <ion-option-button class="royal">
+            <i class="icon ion-ios-telephone button-balanced"></i>
+          </ion-option-button>
+          <ion-option-button class="royal" ng-click="vm.openCompany(address.company_id)">
+            <i class="icon ion-ios-location button-positive"></i>
+          </ion-option-button>
+
+          <h3 class="calm">{{address.company.name}}</h3>
+          <p>
+            {{address.address}} <span ng-if="address.number"> - {{address.number}}</span>
+            <br>
+            <span class="label-ios">{{address.city.name}}</span>
+          </p>
+          <i class="icon ion-chevron-right button-balanced"></i>
+        </div>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
+
