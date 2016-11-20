@@ -1,8 +1,8 @@
 <ion-view view-title="TurnoFarm" ng-controller="CompanyCtrl as vm">
   <ion-content>
-    <div class="card">
+    <div class="card" ng-show="vm.record.company">
       <div class="item item-text-wrap">
-        <h1 class="title">{{vm.record.company.name}}</h1>
+        <h2 class="title">{{vm.record.company.name}}</h2>
         <p>{{vm.record.address}}, {{vm.record.city.name}}</p>
         <p>Distancia: {{vm.record.distance}} kms</p>
         <button class="button small" ng-click="vm.openDatePicker()" ng-if="vm.record.phone_number">
@@ -11,11 +11,6 @@
         </button>
       </div>
     </div>
-    <my-map addresses="vm.addreses" user-location="userLocation"></my-map>
-    <div class="row">
-      <div class="col col-100">
-        <my-map addresses="vm.addreses" user-location="userLocation"></my-map>
-      </div>
-    </div>
+    <my-map addresses="vm.addresses" user-location="userLocation" ng-if="vm.record.company" selected="vm.record"></my-map>
   </ion-content>
 </ion-view>

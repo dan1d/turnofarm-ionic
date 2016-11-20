@@ -36,7 +36,7 @@ gulp.task('install', ['git-check'], function() {
       gutil.log('bower', gutil.colors.cyan(data.id), data.message);
     });
 });
-
+gulp.task('serve:before', ['sass', 'watch']);
 gulp.task('git-check', function(done) {
   if (!sh.which('git')) {
     console.log(

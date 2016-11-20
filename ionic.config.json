@@ -2,6 +2,7 @@
   "name": "turnofarm",
   "app_id": "",
   "gulpStartupTasks": [
+    "sass",
     "watch"
   ],
   "watchPatterns": [

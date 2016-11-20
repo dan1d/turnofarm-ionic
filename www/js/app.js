@@ -43,11 +43,10 @@ angular.module('farmaturn', ['ionic', 'farmaturn.controllers', 'farmaturn.servic
 
   .state('tab.dash', {
     url: '/dash',
-    cache: false,
+    cache: true,
     views: {
       'tab-dash': {
-        templateUrl: 'templates/tab-dash.html',
-        controller: 'DashCtrl'
+        templateUrl: 'templates/tab-dash.html'
       }
     }
   })
@@ -56,8 +55,7 @@ angular.module('farmaturn', ['ionic', 'farmaturn.controllers', 'farmaturn.servic
     url: '/company?:id:date',
     views: {
       'tab-map': {
-        templateUrl: 'templates/company.html',
-        controller: 'CompanyCtrl'
+        templateUrl: 'templates/company.html'
       }
     }
   })
@@ -70,23 +68,8 @@ angular.module('farmaturn', ['ionic', 'farmaturn.controllers', 'farmaturn.servic
           controller: 'MapCtrl'
         }
       }
-    })
-    .state('tab.mapView', {
-      url: '/chats/:chatId',
-      views: {
-        'tab-chats': {
-          templateUrl: 'templates/chat-detail.html',
-          controller: 'ChatDetailCtrl'
-        }
-      }
-    }).state('tab.menu', {
-      url: "/tab/menu",
-      abstract: true,
-      templateUrl: "templates/menu.html",
-      controller: 'AppCtrl'
-    })
+    });
 
-    ;
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/tab/dash');
@@ -94,10 +77,10 @@ angular.module('farmaturn', ['ionic', 'farmaturn.controllers', 'farmaturn.servic
 
    var datePickerObj = {
       inputDate: new Date(),
-      titleLabel: 'Select a Date',
-      setLabel: 'Set',
-      todayLabel: 'Today',
-      closeLabel: 'Close',
+      titleLabel: 'Fecha',
+      setLabel: 'Aceptar',
+      todayLabel: 'Hoy',
+      closeLabel: 'Cerrar',
       mondayFirst: false,
       weeksList: ["S", "M", "T", "W", "T", "F", "S"],
       monthsList: ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"],

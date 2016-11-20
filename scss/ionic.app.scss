@@ -15,11 +15,24 @@ $royal:                           #886aea !default;
 $dark:                            #444 !default;
 */
 
+$mi-dark: #121320 !default;
+$base-background-color: $mi-dark;
+$item-dark-bg: #121314;
+$tabs-assertive-bg: $my-dark;
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../lib/ionic/fonts" !default;
 
+
+#my-card {
+  vertical-align: middle;
+  background-color: $energized;
+}
+
+.tabs-positive > .tabs {
+background-color: red !important;
+}
 // Include all of Ionic
-// @import "www/lib/ionic/scss/ionic";
+@import "www/lib/ionic/scss/ionic";
 
 
 /* Empty. Add your own CSS if you like */
@@ -31,3 +44,14 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   width: 100%;
   height: 100%;
 }
+
+.middle {
+  vertical-align: middle;
+}
+
+.ionic_datepicker_popup {
+  .popup-body {
+      background-color: $my-dark;
+  }
+
+};

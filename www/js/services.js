@@ -13,19 +13,17 @@ angular.module('farmaturn.services', [])
 })
 
 .factory('Report', function($http, Api) {
-  var reports = [];
-    return {
-    reports: reports,
+  return {
     get: make_request
   }
 
   function make_request(params) {
-    var url = Api.url + "reports";
+    var url = Api.url + "dashboard";
     return $http.get(url, {params: params}).then(gerReportCompleted).catch(getReportFailed);
   };
 
   function gerReportCompleted(response) {
-    return response.data.addresses;
+    return response.data;
   }
 
   function getReportFailed(response) {
@@ -88,24 +86,38 @@ angular.module('farmaturn.services', [])
     template: '<div id="my-map" data-tap-disabled="true"></div>',
     scope: {
       addresses: '=',
-      userLocation: '='
+      userLocation: '=',
+      selected: "="
     },
     link: function($scope) {
       var vm = $scope;
+      vm.userMarker = {marker: {}};
+      vm.dropoffMarker;
+      vm.mapInitialized = false;
+
+
+      $scope.init = function() {
+
+      };
 
       $scope.$watch("userLocation", function(newv, oldv) {
-        if (newv) {
+        if (newv && newv !== oldv) {
           vm.googleUserMaplatLng = new google.maps.LatLng(newv.latitude, newv.longitude);
-          initMap();
+          google.maps.event.addDomListener(window, 'load', initMap);
         }
       });
 
       $scope.$watch("addresses", function(newv, oldv) {
         if (newv && vm.googleUserMaplatLng) {
-          addMarkers();
+          addMarkersFor(newv);
         }
       });
 
+      $scope.$watch("selected", function(newv) {
+        if (newv) {
+          calcRoute(newv);
+        };
+      });
 
       function initMap() {
         var mapOptions = {
@@ -115,19 +127,22 @@ angular.module('farmaturn.services', [])
         };
         var element = document.getElementById("my-map");
         vm.map = new google.maps.Map(element, mapOptions);
-        google.maps.event.addListenerOnce(vm.map, 'idle', addDefaultMarker);
-      }
-
-      function addDefaultMarker() {
-        addMarkerToMap('you!', vm.googleUserMaplatLng);
+        vm.directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers: true});
+        vm.directionsService = new google.maps.DirectionsService();
+        vm.directionsDisplay.setMap(vm.map);
+        vm.userMarker = addMarkerToMap('you!', vm.googleUserMaplatLng);
+        vm.mapInitialized = true;
+        console.log(vm.mapInitialized, "trueueueueueueu");
       }
 
       function addMarkerToMap(content, latLng) {
         var marker = new google.maps.Marker({
             map: vm.map,
             animation: google.maps.Animation.DROP,
-            position: latLng
+            position: latLng,
+            map_icon_label: '<i class="ion-medkit icon"></i>'
         });
+
 
         var infoWindow = new google.maps.InfoWindow({
           content: content
@@ -136,18 +151,22 @@ angular.module('farmaturn.services', [])
         google.maps.event.addListener(marker, 'click', function () {
           infoWindow.open(vm.map, marker);
         });
+
+        marker.addListener('click', function(e,b) {
+          $scope.$emit('company:selected', {address: this.iaddress});
+       });
+        return marker;
       }
 
-      function addMarkers() {
-        console.log("vm.addresses", vm.addresses);
-        angular.forEach(vm.addresses, function(address) {
-          console.log("ASDF", address);
-          if (!address.latitude || !address.longitude) {
-            return;
+      function addMarkersFor(addresses) {
+        angular.forEach(addresses, function(address) {
+          if (address && address.latitude && address.longitude) {
+            var latLng = new google.maps.LatLng(address.latitude, address.longitude);
+            createMarkerString(address);
+            var marker = addMarkerToMap(address.string, latLng);
+            address.marker = marker;
+            marker.iaddress = address;
           }
-          var latLng = new google.maps.LatLng(address.latitude, address.longitude);
-          createMarkerString(address);
-          addMarkerToMap(address.string, latLng);
         });
       }
 
@@ -162,25 +181,21 @@ angular.module('farmaturn.services', [])
         address.string = string;
       }
 
-     /* function addCompanyMarkers() {
-        angular.forEach(vm.report.results, function(object) {
-          if (!object.is_city) {
-            var addr = object.address
-            if (addr && addr.latitude && addr.longitude) {
-              var latLng = new google.maps.LatLng(addr.latitude, addr.longitude);
-              var string = '<ul>' +
-                '<li>' + object.company.name + '</li>' +
-                '<li>' + addr.address + '</li>';
-              if (addr.address.number) {
-                string = string + '<li>' +  + '</li>';
-              }
+      function calcRoute(address) {
 
-              string = string + '</ul>';
-              addMarkerToMap(string, latLng);
-            }
-          }
-        });
-      }*/
+        // var start = vm.googleUserMaplatLng;
+        // var end = new google.maps.LatLng(address.latitude, address.longitude);
+        // var request = {
+        //   origin: start,
+        //   destination: end,
+        //   travelMode: 'DRIVING'
+        // };
+        // vm.directionsService.route(request, function(result, status) {
+        //   if (status == 'OK') {
+        //     vm.directionsDisplay.setDirections(result);
+        //   }
+        // });
+      }
 
     }
   }

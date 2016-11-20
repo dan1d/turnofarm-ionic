@@ -5,57 +5,40 @@ angular.module('farmaturn.controllers', [])
 })
 
 .controller('DashCtrl', function($scope, Report, Api, UserLocation, $state, ionicDatePicker, $ionicModal, $ionicSideMenuDelegate) {
+  console.log("HUEHUE");
   var vm = this;
   vm.reportParams = {date: new Date()};
   vm.report = {};
   vm.openDatePicker = openDatePicker;
-  vm.openMap = openMap
-  vm.openCompany = openCompany
+  vm.openCompany = openCompany;
+  vm.request_sent = false;
   activate();
-
-  $ionicModal.fromTemplateUrl('templates/range.html', {
-     scope: $scope,
-     animation: 'slide-in-up'
-   }).then(function(modal) {
-     vm.modal = modal;
-   });
-   vm.openModal = function() {
-     vm.modal.show();
-   };
-   vm.closeModal = function() {
-     vm.modal.hide();
-   };
-   // Cleanup the modal when we're done with it!
-   $scope.$on('$destroy', function() {
-     vm.modal.remove();
-   });
-   // Execute action on hide modal
-   $scope.$on('modal.hidden', function() {
-     // Execute action
-   });
-   // Execute action on remove modal
-   $scope.$on('modal.removed', function() {
-     // Execute action
-   });
+  console.log(vm.reportParams.date);
 
   function activate() {
     UserLocation.getLocation().then(function(userLocation) {
       vm.userLocation = userLocation;
       vm.reportParams["latitude"] = userLocation.latitude;
       vm.reportParams["longitude"] = userLocation.longitude;
-
       getData();
      });
    }
 
   function getData() {
-    return Report.get(vm.reportParams).then(function(data) {
-      vm.addresses = data;
-    });
-  }
-
-  function openMap(report) {
-    $state.go('tab.map', {reportId: report.id});
+    if (!vm.request_sent) {
+      vm.request_sent = true;
+      Report.get(vm.reportParams).then(function(data) {
+        if (data && data.dashboard) {
+          vm.addresses = data.dashboard.addresses;
+        } else {
+          vm.addresses = [];
+        }
+        vm.request_sent = false;
+      }).catch(function(data) {
+        vm.addresses = [];
+        vm.request_sent = false;
+      });
+    }
   }
 
   function openDatePicker(){
@@ -78,18 +61,21 @@ angular.module('farmaturn.controllers', [])
   };
 
   function openCompany(companyId) {
-    $state.go('tab.company', {id: companyId, date: vm.reportParams.date});
+    console.log(vm.reportParams.date);
+    $state.go('tab.company', {id: companyId, date: vm.reportParams.date}, {reload: true});
   }
 
 })
 
 .controller('MapCtrl', function($scope, Report, Api, $stateParams, UserLocation) {
   var vm = this;
+
   if ($stateParams.reportId) {
     vm.reportParams = {id: $stateParams.reportId};
   } else {
     vm.reportParams = {date: new Date()};
   }
+
   vm.report = {};
   vm.latLng = {};
 
@@ -99,7 +85,7 @@ angular.module('farmaturn.controllers', [])
   function activate() {
     UserLocation.getLocation().then(function(userLocation) {
       vm.userLocation = userLocation;
-      vm.googleUserMaplatLng = new google.maps.LatLng(vm.userLocation.latitude, vm.userLocation.longitude);
+      $scope.userLocation = userLocation;
       vm.reportParams["latitude"] = userLocation.latitude;
       vm.reportParams["longitude"] = userLocation.longitude;
       getReport();
@@ -109,13 +95,13 @@ angular.module('farmaturn.controllers', [])
 
   function getReport() {
     Report.get(vm.reportParams).then(function(data) {
-      vm.report = data;
+      vm.addresses = data;
     });
   }
 
 })
 
-.controller('CompanyCtrl', function($scope, $stateParams, UserLocation, Address) {
+.controller('CompanyCtrl', function($scope, $stateParams, UserLocation, Report) {
   var vm = this;
   activate();
 
@@ -123,23 +109,29 @@ angular.module('farmaturn.controllers', [])
     UserLocation.getLocation().then(function(userLocation) {
       $scope.userLocation = userLocation;
       vm.userLocation = userLocation;
-      getAddress();
+      getData();
     });
   }
 
-  function getAddress() {
-    var params = {location: vm.userLocation, date: $stateParams.date};
-    Address.getAddress($stateParams.id, params).then(function(data) {
-      vm.record = data;
-      vm.addreses = [vm.record];
+  function getData() {
+    var params = {
+      latitude: vm.userLocation.latitude,
+      longitude: vm.userLocation.longitude,
+      address_id: $stateParams.id
+    };
+    params.date = $stateParams.date ? new Date($stateParams.date) : new Date();
+
+    Report.get(params).then(function(data) {
+      vm.record = data.dashboard.selected;
+      vm.addresses = data.dashboard.addresses;
     });
-  }
+  };
+
+  $scope.$on('company:selected', function(ev, data) {
+    vm.record = data.address;
+    $scope.$apply();
+  });
 
 })
 
-.controller('AccountCtrl', function($scope) {
-
-  $scope.settings = {
-    enableFriends: true
-  };
-});
+;
