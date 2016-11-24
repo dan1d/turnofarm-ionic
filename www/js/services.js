@@ -80,7 +80,74 @@ angular.module('farmaturn.services', [])
   }
 })
 
-.directive('myMap', function() {
+.factory("MapMarker", function() {
+  var google_map_image = "img/loc.png";
+
+  function generateContent(address) {
+    var string = '<ul>' +
+      '<li>' + address.company.name + '</li>' +
+      '<li>' + address.address + '</li>';
+    if (address.number) {
+      string = string + '<li>' +  + '</li>';
+    }
+    string = string + '</ul>';
+    return string;
+  }
+
+  function addMarkerToMap(address, map, scope) {
+    var latLng = new google.maps.LatLng(address.latitude, address.longitude);
+    var marker = new google.maps.Marker({
+        map: map,
+        animation: google.maps.Animation.DROP,
+        position: latLng
+        // icon: {
+        //   url: google_map_image
+        // }
+    });
+
+
+    var infoWindow = new google.maps.InfoWindow({
+      content: generateContent(address)
+    });
+
+    address.marker = marker;
+    marker.iaddress = address;
+    google.maps.event.addListener(marker, 'click', function () {
+      if (marker.iaddress) {
+        scope.$emit('company:selected', {address: marker.iaddress});
+      }
+      infoWindow.open(map, marker);
+    });
+
+  }
+
+  return {
+    addMarkerToMap: function(address, map, scope) {
+      return addMarkerToMap(address, map, scope);
+    },
+    addUserMarker: function(userLatLong, map, vm) {
+      var marker = new google.maps.Marker({
+         map: map,
+         animation: google.maps.Animation.DROP,
+         position: userLatLong,
+         icon: "img/blue-dot.png"
+      });
+
+      var infoWindow = new google.maps.InfoWindow({
+       content: "you!"
+      });
+
+      console.log("map icon you label!");
+      google.maps.event.addListener(marker, 'click', function () {
+       infoWindow.open(vm.map, marker);
+      });
+
+      return marker;
+    }
+  }
+})
+
+.directive('myMap', ["MapMarker", function(MapMarker) {
   return {
     restrict: 'E',
     template: '<div id="my-map" data-tap-disabled="true"></div>',
@@ -95,26 +162,21 @@ angular.module('farmaturn.services', [])
       vm.dropoffMarker;
       vm.mapInitialized = false;
 
-
-      $scope.init = function() {
-
-      };
-
       $scope.$watch("userLocation", function(newv, oldv) {
         if (newv && newv !== oldv) {
           vm.googleUserMaplatLng = new google.maps.LatLng(newv.latitude, newv.longitude);
-          google.maps.event.addDomListener(window, 'load', initMap);
+          initMap();
         }
       });
 
       $scope.$watch("addresses", function(newv, oldv) {
-        if (newv && vm.googleUserMaplatLng) {
+        if (newv && vm.map) {
           addMarkersFor(newv);
         }
       });
 
       $scope.$watch("selected", function(newv) {
-        if (newv) {
+        if (newv && vm.googleUserMaplatLng) {
           calcRoute(newv);
         };
       });
@@ -125,81 +187,47 @@ angular.module('farmaturn.services', [])
           zoom: 15,
           mapTypeId: google.maps.MapTypeId.ROADMAP
         };
+
         var element = document.getElementById("my-map");
         vm.map = new google.maps.Map(element, mapOptions);
         vm.directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers: true});
         vm.directionsService = new google.maps.DirectionsService();
         vm.directionsDisplay.setMap(vm.map);
-        vm.userMarker = addMarkerToMap('you!', vm.googleUserMaplatLng);
         vm.mapInitialized = true;
-        console.log(vm.mapInitialized, "trueueueueueueu");
-      }
+        vm.userMarker = MapMarker.addUserMarker(vm.googleUserMaplatLng, vm.map, vm);
 
-      function addMarkerToMap(content, latLng) {
-        var marker = new google.maps.Marker({
-            map: vm.map,
-            animation: google.maps.Animation.DROP,
-            position: latLng,
-            map_icon_label: '<i class="ion-medkit icon"></i>'
+        google.maps.event.addListener(vm.map, "idle", function(){
+          console.log("iddddle?");
+          google.maps.event.trigger(vm.map, 'resize');
         });
-
-
-        var infoWindow = new google.maps.InfoWindow({
-          content: content
-        });
-
-        google.maps.event.addListener(marker, 'click', function () {
-          infoWindow.open(vm.map, marker);
-        });
-
-        marker.addListener('click', function(e,b) {
-          $scope.$emit('company:selected', {address: this.iaddress});
-       });
-        return marker;
       }
 
       function addMarkersFor(addresses) {
         angular.forEach(addresses, function(address) {
           if (address && address.latitude && address.longitude) {
-            var latLng = new google.maps.LatLng(address.latitude, address.longitude);
-            createMarkerString(address);
-            var marker = addMarkerToMap(address.string, latLng);
-            address.marker = marker;
-            marker.iaddress = address;
+            MapMarker.addMarkerToMap(address, vm.map, $scope);
           }
         });
       }
 
-      function createMarkerString(address) {
-        var string = '<ul>' +
-          '<li>' + address.company.name + '</li>' +
-          '<li>' + address.address + '</li>';
-        if (address.number) {
-          string = string + '<li>' +  + '</li>';
-        }
-        string = string + '</ul>';
-        address.string = string;
-      }
-
       function calcRoute(address) {
-
-        // var start = vm.googleUserMaplatLng;
-        // var end = new google.maps.LatLng(address.latitude, address.longitude);
-        // var request = {
-        //   origin: start,
-        //   destination: end,
-        //   travelMode: 'DRIVING'
-        // };
-        // vm.directionsService.route(request, function(result, status) {
-        //   if (status == 'OK') {
-        //     vm.directionsDisplay.setDirections(result);
-        //   }
-        // });
+        var start = vm.googleUserMaplatLng;
+        var end = new google.maps.LatLng(address.latitude, address.longitude);
+        var request = {
+          origin: start,
+          destination: end,
+          travelMode: 'DRIVING'
+        };
+        vm.directionsService.route(request, function(result, status) {
+          if (status == 'OK') {
+            vm.directionsDisplay.setDirections(result);
+          }
+        });
       }
 
     }
   }
-})
+}])
 
 
 

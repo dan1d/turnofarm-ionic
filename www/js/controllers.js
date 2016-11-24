@@ -4,8 +4,7 @@ angular.module('farmaturn.controllers', [])
   console.log("log!");
 })
 
-.controller('DashCtrl', function($scope, Report, Api, UserLocation, $state, ionicDatePicker, $ionicModal, $ionicSideMenuDelegate) {
-  console.log("HUEHUE");
+.controller('DashCtrl', function($scope, Report, Api, UserLocation, $state, ionicDatePicker, $ionicModal, $ionicTabsDelegate, $rootScope) {
   var vm = this;
   vm.reportParams = {date: new Date()};
   vm.report = {};
@@ -60,43 +59,15 @@ angular.module('farmaturn.controllers', [])
     ionicDatePicker.openDatePicker(ipObj1);
   };
 
-  function openCompany(companyId) {
-    console.log(vm.reportParams.date);
-    $state.go('tab.company', {id: companyId, date: vm.reportParams.date}, {reload: true});
-  }
+  function openCompany(address) {
+    var data = {
+      selected: address,
+      companies: vm.addresses,
+      date: vm.reportParams.date
+    };
 
-})
-
-.controller('MapCtrl', function($scope, Report, Api, $stateParams, UserLocation) {
-  var vm = this;
-
-  if ($stateParams.reportId) {
-    vm.reportParams = {id: $stateParams.reportId};
-  } else {
-    vm.reportParams = {date: new Date()};
-  }
-
-  vm.report = {};
-  vm.latLng = {};
-
-
-  activate();
-
-  function activate() {
-    UserLocation.getLocation().then(function(userLocation) {
-      vm.userLocation = userLocation;
-      $scope.userLocation = userLocation;
-      vm.reportParams["latitude"] = userLocation.latitude;
-      vm.reportParams["longitude"] = userLocation.longitude;
-      getReport();
-    });
-
-  }
-
-  function getReport() {
-    Report.get(vm.reportParams).then(function(data) {
-      vm.addresses = data;
-    });
+    $rootScope.$broadcast('map:refresh', data);
+    $ionicTabsDelegate.select(1);
   }
 
 })
@@ -130,6 +101,12 @@ angular.module('farmaturn.controllers', [])
   $scope.$on('company:selected', function(ev, data) {
     vm.record = data.address;
     $scope.$apply();
+  });
+
+  $scope.$on("map:refresh", function(ev, data) {
+    vm.record = data.selected;
+    vm.addresses = data.addresses;
+    console.log("xaxa", data);
   });
 
 })

@@ -4,13 +4,13 @@
       <div class="item item-text-wrap">
         <h2 class="title">{{vm.record.company.name}}</h2>
         <p>{{vm.record.address}}, {{vm.record.city.name}}</p>
-        <p>Distancia: {{vm.record.distance}} kms</p>
+        <p>Distancia: {{vm.record.distance | number: 2}} kms</p>
         <button class="button small" ng-click="vm.openDatePicker()" ng-if="vm.record.phone_number">
           <i class="icon ion-ios-telephone padding"></i>
           <small > {{vm.record.phone_number}}</small>
         </button>
       </div>
     </div>
-    <my-map addresses="vm.addresses" user-location="userLocation" ng-if="vm.record.company" selected="vm.record"></my-map>
+    <my-map addresses="vm.addresses" user-location="userLocation" ng-show="userLocation" selected="vm.record"></my-map>
   </ion-content>
 </ion-view>

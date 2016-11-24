@@ -50,22 +50,11 @@ angular.module('farmaturn', ['ionic', 'farmaturn.controllers', 'farmaturn.servic
       }
     }
   })
-
-  .state('tab.company', {
-    url: '/company?:id:date',
-    views: {
-      'tab-map': {
-        templateUrl: 'templates/company.html'
-      }
-    }
-  })
-
   .state('tab.map', {
-      url: '/map?:reportId',
+      url: '/map?:id:date',
       views: {
         'tab-map': {
-          templateUrl: 'templates/tab-map.html',
-          controller: 'MapCtrl'
+          templateUrl: 'templates/company.html'
         }
       }
     });
