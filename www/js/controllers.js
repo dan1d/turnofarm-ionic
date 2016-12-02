@@ -4,19 +4,21 @@ angular.module('farmaturn.controllers', [])
   console.log("log!");
 })
 
-.controller('DashCtrl', function($scope, Report, Api, UserLocation, $state, ionicDatePicker, $ionicModal, $ionicTabsDelegate, $rootScope) {
+.controller('DashCtrl', function($scope, Report, Api, UserLocation, $state, ionicDatePicker, $ionicModal, $ionicTabsDelegate, $rootScope, $ionicPlatform) {
   var vm = this;
   vm.reportParams = {date: new Date()};
   vm.report = {};
   vm.openDatePicker = openDatePicker;
   vm.openCompany = openCompany;
   vm.request_sent = false;
-  activate();
+
+  $ionicPlatform.ready(activate);
   console.log(vm.reportParams.date);
 
   function activate() {
     UserLocation.getLocation().then(function(userLocation) {
       vm.userLocation = userLocation;
+      console.log("userLocation", userLocation);
       vm.reportParams["latitude"] = userLocation.latitude;
       vm.reportParams["longitude"] = userLocation.longitude;
       getData();
@@ -72,9 +74,9 @@ angular.module('farmaturn.controllers', [])
 
 })
 
-.controller('CompanyCtrl', function($scope, $stateParams, UserLocation, Report) {
+.controller('CompanyCtrl', function($scope, $stateParams, UserLocation, Report, $ionicPlatform) {
   var vm = this;
-  activate();
+  $ionicPlatform.ready(activate);
 
   function activate() {
     UserLocation.getLocation().then(function(userLocation) {
