@@ -4,7 +4,7 @@ angular.module('farmaturn.controllers', [])
 
 })
 
-.controller('DashCtrl', function($scope, Report, Api,$state, ionicDatePicker, $ionicModal, $ionicTabsDelegate, $rootScope, $ionicPlatform, $cordovaGeolocation, $ionicNavBarDelegate, $timeout) {
+.controller('DashCtrl', function($scope, Report, Api,$state, ionicDatePicker, $ionicModal, $ionicTabsDelegate, $rootScope, $ionicPlatform, $cordovaGeolocation, $ionicNavBarDelegate, $timeout, $ionicDeploy) {
   var vm = this;
   vm.reportParams = {date: new Date()};
   vm.report = {};
@@ -18,6 +18,16 @@ angular.module('farmaturn.controllers', [])
     $timeout(function(){
       $ionicNavBarDelegate.align('center');
     });
+  });
+
+  $ionicDeploy.check().then(function(snapshotAvailable) {
+    if (snapshotAvailable) {
+     $ionicDeploy.download().then(function() {
+       return $ionicDeploy.extract().then(function() {
+        $ionicDeploy.load();
+       });
+     });
+    }
   });
 
   function activate() {
@@ -79,7 +89,7 @@ angular.module('farmaturn.controllers', [])
 
 })
 
-.controller('CompanyCtrl', function($scope, $stateParams, $cordovaGeolocation, Report, $ionicPlatform, $timeout, $ionicNavBarDelegate) {
+.controller('CompanyCtrl', function($scope, $stateParams, $cordovaGeolocation, Report, $ionicPlatform, $timeout, $ionicNavBarDelegate, $ionicDeploy) {
   var vm = this;
   $ionicPlatform.ready(activate);
 

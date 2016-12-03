@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('farmaturn', ['ionic', 'farmaturn.controllers', 'farmaturn.services', 'ngCordova', 'ionic-datepicker'])
+angular.module('farmaturn', ['ionic', 'farmaturn.controllers', 'farmaturn.services', 'ngCordova', 'ionic-datepicker', 'ionic.cloud'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
