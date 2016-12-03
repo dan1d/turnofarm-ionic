@@ -9,7 +9,7 @@
       </div>
     </div>
     <ion-list id="my-item-list">
-      <ion-item ng-repeat="address in vm.addresses" type="item-text-wrap" class="my-item-content item-icon-right item-dark">
+      <ion-item ng-repeat="address in vm.addresses | orderBy: '-distance'" type="item-text-wrap" class="my-item-content item-icon-right item-dark">
         <div>
           <ion-option-button class="button button-dark">
             <i class="icon ion-ios-telephone energized"></i>

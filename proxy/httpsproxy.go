@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-  localProxyUrl, _ := url.Parse("http://127.0.0.1:8100/")
+  localProxyUrl, _ := url.Parse("http://192.168.1.2:8101")
   localProxy := httputil.NewSingleHostReverseProxy(localProxyUrl)
   http.Handle("/", localProxy)
 
