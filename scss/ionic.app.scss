@@ -18,9 +18,47 @@ $dark:                            #444 !default;
 $mi-dark: #121320 !default;
 $base-background-color: $mi-dark;
 $item-dark-bg: #121314;
+$item-dark-border: $energized;
 $tabs-assertive-bg: $my-dark;
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../lib/ionic/fonts" !default;
+
+.item.item-dark.item.item-dark {
+  border-color: $calm;
+}
+
+.ionic_datepicker_popup .selected_date {
+  background-color: $calm !important;
+}
+.ionic_datepicker_popup .today {
+  background-color: $calm !important;
+  border: 1px solid $calm !important;
+}
+
+.ionic_datepicker_popup .popup-buttons button {
+  background-color: $calm !important;
+}
+
+.ionic_datepicker_popup .popup-body .selected_date_full {
+  background-color: $calm !important;
+}
+
+.ionic_datepicker_popup .popup-body .show_nav .prev_btn_section button {
+  color: $calm !important;
+}
+
+.ionic_datepicker_popup .popup-body .month_select, .ionic_datepicker_popup .popup-body .year_select {
+  color: $calm !important;
+  border-bottom: 1px solid $calm !important;
+}
+
+.ionic_datepicker_popup .popup-body .month_select::after, .ionic_datepicker_popup .popup-body .year_select::after {
+  color: $calm !important;
+}
+
+.ionic_datepicker_popup .popup-body .show_nav .next_btn_section button {
+  color: $calm !important;
+}
 
 
 #my-card {

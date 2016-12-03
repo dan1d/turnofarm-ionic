@@ -5,10 +5,10 @@
         <h2 class="title">{{vm.record.company.name}}</h2>
         <p>{{vm.record.address}}, {{vm.record.city.name}}</p>
         <p>Distancia: {{vm.record.distance | number: 2}} kms</p>
-        <button class="button small" ng-click="vm.openDatePicker()" ng-if="vm.record.phone_number">
-          <i class="icon ion-ios-telephone padding"></i>
-          <small > {{vm.record.phone_number}}</small>
-        </button>
+        <a class="button small button-dark" ng-href="tel: {{address.phone_number}}" ng-if="vm.record.phone_number">
+          <i class="icon ion-ios-telephone padding calm"></i>
+          <small class="calm"> {{vm.record.phone_number}}</small>
+        </a>
       </div>
     </div>
     <my-map addresses="vm.addresses" position="position" ng-show="position" selected="vm.record"></my-map>

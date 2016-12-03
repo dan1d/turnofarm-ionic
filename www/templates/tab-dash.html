@@ -11,21 +11,29 @@
     <ion-list id="my-item-list">
       <ion-item ng-repeat="address in vm.addresses | orderBy: 'distance'" type="item-text-wrap" class="my-item-content item-icon-right item-dark">
         <div>
-          <ion-option-button class="button button-dark">
-            <i class="icon ion-ios-telephone energized"></i>
-          </ion-option-button>
-          <ion-option-button class="button-dark"
-          ng-click="vm.openCompany(address)">
-            <i class="icon ion-ios-location energized"></i>
-          </ion-option-button>
-
           <h3 class="energized">{{address.company.name}}</h3>
           <p clas="energized">
-            {{address.address}} <a  ng-href="tel: {{address.number}}" ng-if="address.number"> - {{address.number}}</a>
+            Distancia: {{address.distance | number: 2}} kms.
             <br>
-            <span class="label-ios">{{address.city.name}}</span>
+            <span ng-if="address.city.name" class="label-ios">
+            {{address.city.name}}
+            </span>
           </p>
-          <i class="icon ion-chevron-right energized"></i>
+
+          <button class="button small button-dark"
+          ng-click="vm.openCompany(address)">
+            <i class="icon ion-ios-location calm"></i>
+            <span class="light" style="margin-right: 30px;">
+              {{address.address}}
+            </span>
+          </button>
+
+          <a ng-href="tel: {{address.phone_number}}" class="button button-dark" ng-if="address.phone_number">
+            <i class="icon ion-ios-telephone calm"></i>
+            <span class="light" style="margin-right: 30px;">
+              {{address.phone_number}}
+            </span>
+          </a>
         </div>
       </ion-item>
     </ion-list>

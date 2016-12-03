@@ -18,6 +18,42 @@ $dark:                            #444 !default;
 #my-card {
   vertical-align: middle;
   background-color: #ffc900; }
+.item.item-dark.item.item-dark {
+  border-color: #11c1f3;
+}
+
+.ionic_datepicker_popup .selected_date {
+  background-color: #11c1f3 !important;
+}
+.ionic_datepicker_popup .today {
+  background-color: #11c1f3 !important;
+  border: 1px solid #11c1f3 !important;
+}
+
+.ionic_datepicker_popup .popup-buttons button {
+  background-color: #11c1f3 !important;
+}
+
+.ionic_datepicker_popup .popup-body .selected_date_full {
+  background-color: #11c1f3 !important;
+}
+
+.ionic_datepicker_popup .popup-body .show_nav .prev_btn_section button {
+  color: #11c1f3 !important;
+}
+
+.ionic_datepicker_popup .popup-body .month_select, .ionic_datepicker_popup .popup-body .year_select {
+  color: #11c1f3 !important;
+  border-bottom: 1px solid #11c1f3 !important;
+}
+
+.ionic_datepicker_popup .popup-body .month_select::after, .ionic_datepicker_popup .popup-body .year_select::after {
+  color: #11c1f3 !important;
+}
+
+.ionic_datepicker_popup .popup-body .show_nav .next_btn_section button {
+  color: #11c1f3 !important;
+}
 
 /*!
   Ionicons, v2.0.1
