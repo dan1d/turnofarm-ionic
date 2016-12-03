@@ -1,10 +1,10 @@
 angular.module('farmaturn.controllers', [])
 
 .controller('AppCtrl', function($scope) {
-  console.log("log!");
+
 })
 
-.controller('DashCtrl', function($scope, Report, Api, UserLocation, $state, ionicDatePicker, $ionicModal, $ionicTabsDelegate, $rootScope, $ionicPlatform) {
+.controller('DashCtrl', function($scope, Report, Api,$state, ionicDatePicker, $ionicModal, $ionicTabsDelegate, $rootScope, $ionicPlatform, $cordovaGeolocation, $ionicNavBarDelegate, $timeout) {
   var vm = this;
   vm.reportParams = {date: new Date()};
   vm.report = {};
@@ -13,14 +13,19 @@ angular.module('farmaturn.controllers', [])
   vm.request_sent = false;
 
   $ionicPlatform.ready(activate);
-  console.log(vm.reportParams.date);
+
+  $scope.$on('$ionicView.enter', function() {
+    $timeout(function(){
+      $ionicNavBarDelegate.align('center');
+    });
+  });
 
   function activate() {
-    UserLocation.getLocation().then(function(userLocation) {
-      vm.userLocation = userLocation;
-      console.log("userLocation", userLocation);
-      vm.reportParams["latitude"] = userLocation.latitude;
-      vm.reportParams["longitude"] = userLocation.longitude;
+    var options = {timeout: 10000, enableHighAccuracy: true};
+    $cordovaGeolocation.getCurrentPosition(options).then(function(position) {
+      vm.position = position.coords;
+      vm.reportParams["latitude"] = position.coords.latitude;
+      vm.reportParams["longitude"] = position.coords.longitude;
       getData();
      });
    }
@@ -51,7 +56,7 @@ angular.module('farmaturn.controllers', [])
       disabledDates: [            //Optional
       ],
       from: new Date(2012, 1, 1), //Optional
-      to: new Date(2016, 10, 30), //Optional
+      to: new Date(2017, 12, 31), //Optional
       inputDate: vm.reportParams.date,      //Optional
       mondayFirst: true,          //Optional
       disableWeekdays: [0],       //Optional
@@ -74,22 +79,29 @@ angular.module('farmaturn.controllers', [])
 
 })
 
-.controller('CompanyCtrl', function($scope, $stateParams, UserLocation, Report, $ionicPlatform) {
+.controller('CompanyCtrl', function($scope, $stateParams, $cordovaGeolocation, Report, $ionicPlatform, $timeout, $ionicNavBarDelegate) {
   var vm = this;
   $ionicPlatform.ready(activate);
 
+  $scope.$on('$ionicView.enter', function() {
+    $timeout(function(){
+      $ionicNavBarDelegate.align('center');
+    });
+  });
+
   function activate() {
-    UserLocation.getLocation().then(function(userLocation) {
-      $scope.userLocation = userLocation;
-      vm.userLocation = userLocation;
+    var options = {timeout: 10000, enableHighAccuracy: true};
+    $cordovaGeolocation.getCurrentPosition(options).then(function(position) {
+      $scope.position = position.coords;
+      vm.position = position.coords;
       getData();
     });
   }
 
   function getData() {
     var params = {
-      latitude: vm.userLocation.latitude,
-      longitude: vm.userLocation.longitude,
+      latitude: vm.position.latitude,
+      longitude: vm.position.longitude,
       address_id: $stateParams.id
     };
     params.date = $stateParams.date ? new Date($stateParams.date) : new Date();

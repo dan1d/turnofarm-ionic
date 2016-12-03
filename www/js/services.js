@@ -1,7 +1,8 @@
 angular.module('farmaturn.services', [])
 
 .factory("Api", function() {
-  var host_url = "http://api.turnofarm.dev:3000";
+  // var host_url = "http://turnofarm.dev:3000";
+  var host_url = "https://turnofarm-be.herokuapp.com";
   var version = "v1";
   var api_path = "/" + version + "/";
   var api_url = host_url + api_path;
@@ -28,32 +29,6 @@ angular.module('farmaturn.services', [])
 
   function getReportFailed(response) {
     console.log(response);
-  }
-})
-
-.factory('UserLocation', function($cordovaGeolocation) {
-  var location = {};
-
-  return {
-    location: location,
-    getLocation: getLocation
-  }
-
-  function getLocation() {
-    var options = {timeout: 10000, enableHighAccuracy: true};
-    return $cordovaGeolocation.getCurrentPosition(options).then(successLocationGet).catch(errorLocationGet);
-  }
-
-  function successLocationGet(position) {
-    location = {
-      latitude: position.coords.latitude,
-      longitude: position.coords.longitude
-    };
-    return location;
-  }
-
-  function errorLocationGet(error) {
-    console.log("Could not get location", error);
   }
 })
 
@@ -153,7 +128,7 @@ angular.module('farmaturn.services', [])
     template: '<div id="my-map" data-tap-disabled="true"></div>',
     scope: {
       addresses: '=',
-      userLocation: '=',
+      position: '=',
       selected: "="
     },
     link: function($scope) {
@@ -162,7 +137,7 @@ angular.module('farmaturn.services', [])
       vm.dropoffMarker;
       vm.mapInitialized = false;
 
-      $scope.$watch("userLocation", function(newv, oldv) {
+      $scope.$watch("position", function(newv, oldv) {
         if (newv && newv !== oldv) {
           vm.googleUserMaplatLng = new google.maps.LatLng(newv.latitude, newv.longitude);
           initMap();
@@ -189,6 +164,7 @@ angular.module('farmaturn.services', [])
         };
 
         var element = document.getElementById("my-map");
+        console.log("initialized map");
         vm.map = new google.maps.Map(element, mapOptions);
         vm.directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers: true});
         vm.directionsService = new google.maps.DirectionsService();

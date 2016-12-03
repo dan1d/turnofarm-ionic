@@ -25,7 +25,10 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 #my-card {
   vertical-align: middle;
-  background-color: $energized;
+  background-color: transparent;
+  .item-divider {
+    background-color: transparent;
+  }
 }
 
 .tabs-positive > .tabs {

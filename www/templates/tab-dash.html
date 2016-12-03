@@ -1,29 +1,11 @@
 <ion-view view-title="TurnoFarm" ng-controller="DashCtrl as vm">
   <ion-content>
-    <ion-list id="my-item-list">
-      <ion-item type="item-text-wrap" class="my-item-content item-dark">
-
-
-        <!-- <ion-option-button class="royal" ng-click="vm.openDatePicker()>
-            <i class="icon ion-ios-telephone button-balanced"></i>
-          </ion-option-button>
-        <h3 class="positive">Farmacias de turno para: {{vm.date | date: "mediumDate"}}</h3> -->
-      </ion-item>
-    </ion-list>
-
-    <div class="card subheader">
-      <div class="item item-text-wrap" id="my-card">
-          <h1 class="dark" style="display: inline;">
-            Farmacias de turno
-          </h1>
-          <br>
-          <br>
-          <br>
-          <button class="royal button button-dark middle" ng-click="vm.openDatePicker()">
-            <i class="icon ion-android-calendar"></i>
-            {{vm.reportParams.date | date: "mediumDate"}}
-          </button>
-
+    <div class="card" id="my-card">
+      <div class="item item-divider text-center">
+        <button class="royal button button-dark" ng-click="vm.openDatePicker()" style="display: inline;">
+          <i class="icon ion-android-calendar"></i>
+          Farmacias de turno para: {{vm.reportParams.date | date: "mediumDate"}}
+        </button>
       </div>
     </div>
     <ion-list id="my-item-list">
