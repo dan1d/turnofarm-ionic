@@ -1,7 +1,7 @@
 {
   "name": "turnofarm",
   "version": "1.1.2",
-  "description": "turnofarm: An Ionic project",
+  "description": "turnofarm: Farmacias de turno Tucuman",
   "dependencies": {
     "@ionic/cloud": "^0.14.1",
     "bluebird": "^3.4.6",

@@ -34,8 +34,8 @@ angular.module('farmaturn.controllers', [])
     var options = {timeout: 10000, enableHighAccuracy: true};
     $cordovaGeolocation.getCurrentPosition(options).then(function(position) {
       vm.position = position.coords;
-      vm.reportParams["latitude"] = position.coords.latitude;
-      vm.reportParams["longitude"] = position.coords.longitude;
+      vm.reportParams.latitude = position.coords.latitude;
+      vm.reportParams.longitude = position.coords.longitude;
       getData();
      });
    }
@@ -74,17 +74,16 @@ angular.module('farmaturn.controllers', [])
       templateType: 'popup'       //Optional
     };
     ionicDatePicker.openDatePicker(ipObj1);
-  };
+  }
 
   function openCompany(address) {
-    var data = {
-      selected: address,
-      companies: vm.addresses,
-      date: vm.reportParams.date
-    };
-
     $ionicTabsDelegate.select(1);
     $timeout(function() {
+      var data = {
+        selected: address,
+        companies: vm.addresses,
+        date: vm.reportParams.date
+      };
       $rootScope.$broadcast('map:refresh', data);
     }, 10);
   }

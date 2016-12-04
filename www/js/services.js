@@ -16,12 +16,12 @@ angular.module('farmaturn.services', [])
 .factory('Report', function($http, Api) {
   return {
     get: make_request
-  }
+  };
 
   function make_request(params) {
     var url = Api.url + "dashboard";
     return $http.get(url, {params: params}).then(gerReportCompleted).catch(getReportFailed);
-  };
+  }
 
   function gerReportCompleted(response) {
     return response.data;
@@ -39,12 +39,12 @@ angular.module('farmaturn.services', [])
       return address;
     },
     getAddress: getAddress
-  }
+  };
 
   function getAddress(id, params) {
     var url = Api.url + "address/" + id;
     return $http.get(url, {params: params}).then(gerReportCompleted).catch(getReportFailed);
-  };
+  }
 
   function gerReportCompleted(response) {
     return response.data.address;
@@ -63,7 +63,7 @@ angular.module('farmaturn.services', [])
       '<li>' + address.company.name + '</li>' +
       '<li>' + address.address + '</li>';
     if (address.number) {
-      string = string + '<li>' +  + '</li>';
+      string = string + '<li>' + address.number  + '</li>';
     }
     string = string + '</ul>';
     return string;
@@ -119,7 +119,7 @@ angular.module('farmaturn.services', [])
 
       return marker;
     }
-  }
+  };
 })
 
 .directive('myMap', ["MapMarker", function(MapMarker) {
