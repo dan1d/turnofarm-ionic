@@ -83,8 +83,10 @@ angular.module('farmaturn.controllers', [])
       date: vm.reportParams.date
     };
 
-    $rootScope.$broadcast('map:refresh', data);
     $ionicTabsDelegate.select(1);
+    $timeout(function() {
+      $rootScope.$broadcast('map:refresh', data);
+    }, 10);
   }
 
 })
@@ -115,9 +117,10 @@ angular.module('farmaturn.controllers', [])
       address_id: $stateParams.id
     };
     params.date = $stateParams.date ? new Date($stateParams.date) : new Date();
-
     Report.get(params).then(function(data) {
-      vm.record = data.dashboard.selected;
+      if (data.dashboard.selected) {
+        vm.record = data.dashboard.selected;
+      }
       vm.addresses = data.dashboard.addresses;
     });
   };

@@ -164,7 +164,6 @@ angular.module('farmaturn.services', [])
         };
 
         var element = document.getElementById("my-map");
-        console.log("initialized map");
         vm.map = new google.maps.Map(element, mapOptions);
         vm.directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers: true});
         vm.directionsService = new google.maps.DirectionsService();
@@ -173,7 +172,6 @@ angular.module('farmaturn.services', [])
         vm.userMarker = MapMarker.addUserMarker(vm.googleUserMaplatLng, vm.map, vm);
 
         google.maps.event.addListener(vm.map, "idle", function(){
-          console.log("iddddle?");
           google.maps.event.trigger(vm.map, 'resize');
         });
       }

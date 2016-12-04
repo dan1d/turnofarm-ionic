@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.ionicframework.turnofarm862328" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="8" id="com.ionicframework.turnofarm862328" version="1.0.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>turnofarm</name>
   <description>&#xD;
         An Ionic Framework and Cordova project.&#xD;
@@ -7,7 +7,7 @@
   <author email="you@example.com" href="http://example.com.com/">&#xD;
       Your Name Here&#xD;
     </author>
-  <content src="http://192.168.1.2:8100" original-src="index.html"/>
+  <content src="index.html"/>
   <access origin="*"/>
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>
@@ -82,8 +82,9 @@
     <icon src="resources\wp8\icon\Background.png" width="159" height="159"/>
     <splash src="resources\wp8\splash\SplashScreenImage.png" width="768" height="1280"/>
   </platform>
-  <allow-navigation href="https://192.168.1.2:8100"/>
   <allow-navigation href="http://192.168.1.2:8101"/>
+  <allow-navigation href="https://192.168.1.2:8100"/>
   <allow-navigation href="http://192.168.1.2:8100"/>
+  <allow-navigation href="https://turnofarm-be.herokuapp.com"/>
   <icon src="resources\android\icon\drawable-xhdpi-icon.png"/>
 </widget>

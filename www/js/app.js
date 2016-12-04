@@ -24,7 +24,7 @@ angular.module('farmaturn', ['ionic', 'farmaturn.controllers', 'farmaturn.servic
   });
 })
 
-.config(function($stateProvider, $urlRouterProvider, ionicDatePickerProvider) {
+.config(function($stateProvider, $urlRouterProvider, ionicDatePickerProvider, $ionicCloudProvider) {
 
   // Ionic uses AngularUI Router which uses the concept of states
   // Learn more here: https://github.com/angular-ui/ui-router
@@ -82,5 +82,11 @@ angular.module('farmaturn', ['ionic', 'farmaturn.controllers', 'farmaturn.servic
       disableWeekdays: []
     };
     ionicDatePickerProvider.configDatePicker(datePickerObj);
+
+    $ionicCloudProvider.init({
+     "core": {
+       "app_id": "6ea3e29d"
+     }
+   });
 
 });

@@ -11,8 +11,10 @@
     <ion-list id="my-item-list">
       <ion-item ng-repeat="address in vm.addresses | orderBy: 'distance'" type="item-text-wrap" class="my-item-content item-icon-right item-dark">
         <div>
-          <h3 class="energized">{{address.company.name}}</h3>
-          <p clas="energized">
+          <h3 class="light">{{address.company.name}}</h3>
+          <p class="energized">
+            {{address.address}}
+            <br>
             Distancia: {{address.distance | number: 2}} kms.
             <br>
             <span ng-if="address.city.name" class="label-ios">
@@ -23,14 +25,13 @@
           <button class="button small button-dark"
           ng-click="vm.openCompany(address)">
             <i class="icon ion-ios-location calm"></i>
-            <span class="light" style="margin-right: 30px;">
-              {{address.address}}
+            <span class="calm" style="margin-right: 30px;">
+              Ver en Mapa
             </span>
           </button>
-
-          <a ng-href="tel: {{address.phone_number}}" class="button button-dark" ng-if="address.phone_number">
-            <i class="icon ion-ios-telephone calm"></i>
-            <span class="light" style="margin-right: 30px;">
+          <a href="tel:{{address.phone_number}}" class="button button-dark" ng-if="address.phone_number">
+            <i class="icon ion-ios-telephone balanced"></i>
+            <span class="balanced" style="margin-right: 30px;">
               {{address.phone_number}}
             </span>
           </a>
