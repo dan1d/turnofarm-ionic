@@ -4,7 +4,7 @@ angular.module('farmaturn.controllers', [])
 
 })
 
-.controller('DashCtrl', function($scope, Report, Api,$state, ionicDatePicker, $ionicModal, $ionicTabsDelegate, $rootScope, $ionicPlatform, $cordovaGeolocation, $ionicNavBarDelegate, $timeout, $ionicDeploy) {
+.controller('DashCtrl', function($scope, Report, Api,$state, ionicDatePicker, $ionicModal, $ionicTabsDelegate, $rootScope, $ionicPlatform, $cordovaGeolocation, $ionicNavBarDelegate, $timeout, $ionicDeploy, $http, Api) {
   var vm = this;
   vm.reportParams = {date: new Date()};
   vm.report = {};
@@ -31,6 +31,9 @@ angular.module('farmaturn.controllers', [])
   });
 
   function activate() {
+    $http.get(Api.url, {'test': true}).then(function() {
+      console.log("ax");
+    });
     var options = {timeout: 10000, enableHighAccuracy: true};
     $cordovaGeolocation.getCurrentPosition(options).then(function(position) {
       vm.position = position.coords;
